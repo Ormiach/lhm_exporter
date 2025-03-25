@@ -132,7 +132,7 @@ while($true)
         $parent = get-wmiobject -namespace "root/LibreHardwareMonitor" -Class Hardware -filter "$match" 
 		
         ########################
-		# Make Metrics Beautiful 
+        # Make Metrics Beautiful 
         ########################
         # Add parent name to metric, for better sorting
         if ($parent.HardwareType.ToLower()) {
