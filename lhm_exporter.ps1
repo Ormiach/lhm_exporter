@@ -207,8 +207,8 @@ while($true)
 	$last_metricname = ""
 	foreach($metricname in $promhash.keys) {
 		if ($last_metricname -Ne $metricname) {
-			Add-Content $filename ("# HELP "+$promhash[$metricname].metric_help)
-			Add-Content $filename ("# TYPE "+$promhash[$metricname].metric_type)
+			Add-Content $filename ("# HELP "+$promhash[$metricname].metric_help) -Encoding UTF8
+			Add-Content $filename ("# TYPE "+$promhash[$metricname].metric_type) -Encoding UTF8
 		}
 		foreach($metricnumber in $promhash[$metricname].keys) {
 			$metric = $metricname+"{"
@@ -219,10 +219,10 @@ while($true)
 					$metric = $metric+$key+'="'+$promhash[$metricname][$metricnumber][$key]+'",'
 				}
 				$metric = $metric.Substring(0,$metric.Length-1)
-				Add-Content $filename ( $metric+"} "+$promhash[$metricname][$metricnumber]['value'] )
+				Add-Content $filename ( $metric+"} "+$promhash[$metricname][$metricnumber]['value'] ) -Encoding UTF8
 			}
 		}
-        Add-Content $filename ("")
+        Add-Content $filename ("") -Encoding UTF8
 	}
 
 	# Move file to prometheus folder
