@@ -43,7 +43,7 @@
         PS>./lhm_exporter.ps1 -promfolder "C:\Program Files\windows_exporter\textfile_inputs"
 
     .NOTES
-        Version:        1.1
+        Version:        1.0.2
         Author:         Ormiach
         Creation Date:  2025
 
@@ -125,6 +125,7 @@ while($true)
 		$metricname_name = ""
 		$metricname_end = ""
 		$addparent = ""
+        $parent_hardwaretype = ""
 		$checkitems = $checkitems + 1
 		
         # Get parent information
@@ -136,11 +137,13 @@ while($true)
         ########################
         # Add parent name to metric, for better sorting
         if ($parent.HardwareType.ToLower()) {
-            if ($parent.HardwareType.ToLower() -Match "superio") { $parent.HardwareType = "Motherboard" }
-            elseif ($parent.HardwareType.ToLower() -Match "storage") { $parent.HardwareType = "Disk" }
+            $parent_hardwaretype = $parent.HardwareType
+            if ($parent_hardwaretype.ToLower() -Match "superio") { $parent_hardwaretype = "Motherboard" }
+            elseif ($parent_hardwaretype.ToLower() -Match "storage") { $parent_hardwaretype = "Disk" }
             # Match gpuamd and others as gpu
-            elseif ($parent.HardwareType.ToLower() -Match "gpu") { $parent.HardwareType = "Gpu" }
-            $addparent = $parent.HardwareType.ToLower() + "_" 
+            elseif ($parent_hardwaretype.ToLower() -Match "gpu") { 
+                $parent_hardwaretype = "Gpu" }
+            $addparent = $parent_hardwaretype.ToLower() + "_" 
         }
         
         # Replace some stuff
@@ -193,7 +196,7 @@ while($true)
 		$promhash[$metricname][$promhash_counter]['parent_identifier'] = $element.Parent
 		$promhash[$metricname][$promhash_counter]['parent_name'] = $parent.Name
 		$promhash[$metricname][$promhash_counter]['identifier'] = $element.Identifier
-		$promhash[$metricname][$promhash_counter]['device'] = $parent.HardwareType
+		$promhash[$metricname][$promhash_counter]['device'] = $parent_hardwaretype
 		$promhash[$metricname][$promhash_counter]['name'] = $element.Name
 		$promhash[$metricname][$promhash_counter]['index'] = $element.Index
 		$promhash[$metricname][$promhash_counter]['type'] = $element.SensorType
